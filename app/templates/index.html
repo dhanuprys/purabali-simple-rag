@@ -1,44 +1,93 @@
 {% extends 'base.html' %}
-{% block title %}Home{% endblock %}
-{% block content %}
-<!-- Hero Section -->
-<section class="relative w-full flex flex-col items-center justify-center py-16 mb-12 bg-gradient-to-br from-blue-50 via-white to-blue-100 rounded-3xl shadow-sm overflow-hidden">
-    <div class="absolute inset-0 pointer-events-none">
-        <svg class="absolute top-0 left-0 w-64 h-64 opacity-20 text-blue-200" fill="currentColor" viewBox="0 0 400 400"><circle cx="200" cy="200" r="200"/></svg>
-        <svg class="absolute bottom-0 right-0 w-64 h-64 opacity-10 text-blue-300" fill="currentColor" viewBox="0 0 400 400"><circle cx="200" cy="200" r="200"/></svg>
-    </div>
-    <div class="relative z-10 flex flex-col items-center text-center">
-        <h1 class="text-5xl md:text-6xl font-extrabold text-blue-900 mb-4 drop-shadow">Purabali Data Explorer</h1>
-        <p class="text-xl md:text-2xl text-blue-700 font-medium mb-6 max-w-2xl">Platform modern untuk menjelajahi data pura, kabupaten, dan jenis pura di Bali. Temukan informasi menarik dan inspirasi wisata budaya Bali.</p>
-    </div>
-</section>
+{% block title %}Home - Purabali Data Explorer{% endblock %}
 
-<!-- Navigation Section -->
-<section class="w-full flex flex-col items-center justify-center gap-10">
-    <h2 class="text-2xl md:text-3xl font-bold text-blue-800 mb-2">Jelajahi Data</h2>
-    <p class="text-lg text-gray-600 mb-6 text-center max-w-xl">Pilih salah satu kategori di bawah ini untuk mulai menjelajahi data yang tersedia di Purabali.</p>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-3xl">
-        <a href="/pura" class="group block bg-white hs-card hs-card-bordered shadow-lg hover:shadow-2xl transition p-8 text-center border border-blue-200 hover:border-blue-500 rounded-2xl relative overflow-hidden">
-            <span class="flex items-center justify-center w-14 h-14 mx-auto mb-4 rounded-full bg-blue-50 group-hover:bg-blue-100 transition">
-                <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.364-6.364l-1.414 1.414M6.343 17.657l-1.414 1.414M17.657 17.657l-1.414-1.414M6.343 6.343L4.929 7.757"/></svg>
-            </span>
-            <span class="text-2xl font-semibold text-blue-700 mb-2 block">Daftar Pura</span>
-            <span class="text-gray-500 text-base">Lihat koleksi pura di Bali beserta detailnya.</span>
+{% block content %}
+<!-- 
+  Main container for the page content. 
+  Using a subtle background color for the entire page to give it a soft feel.
+  Padding is added for spacing on all sides.
+-->
+<div class="bg-slate-50 w-full min-h-full px-4 sm:px-6 lg:px-8">
+  <div class="max-w-7xl mx-auto">
+
+    <!-- Hero Section -->
+    <!-- 
+      This section is designed to make a strong first impression.
+      It features a background gradient that evokes a Balinese sunset.
+      Abstract shapes are added for visual interest and depth.
+      The content is centered and uses responsive typography.
+    -->
+    <section class="relative w-full py-20 sm:py-28 md:py-32 my-8 sm:my-12 bg-gradient-to-br from-amber-50 via-orange-50 to-red-100 rounded-3xl overflow-hidden">
+      <div class="absolute -top-10 -left-10 w-64 h-64 bg-amber-200/50 rounded-full filter blur-3xl opacity-60"></div>
+      <div class="absolute -bottom-16 -right-0 w-80 h-80 bg-red-200/50 rounded-full filter blur-3xl opacity-70"></div>
+      <div class="relative z-10 flex flex-col items-center text-center px-4">
+        <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold text-slate-900 mb-4 tracking-tight font-serif">
+          Jelajahi Pesona Pura di Bali
+        </h1>
+        <p class="text-lg sm:text-xl text-slate-600 font-normal mb-8 max-w-3xl">
+          Platform modern untuk menemukan informasi pura, kabupaten, dan jenis pura di seluruh Bali. Mulailah perjalanan digital Anda ke jantung budaya Bali.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4">
+            <a href="#jelajahi" class="inline-flex items-center justify-center rounded-full bg-slate-900 px-8 py-3 text-base font-semibold text-white shadow-lg hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50 transition-transform duration-200 hover:-translate-y-1">
+                Mulai Menjelajah
+            </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Navigation Section -->
+    <!-- 
+      This section provides clear navigation paths for the user.
+      It has a clean title and description, followed by a grid of interactive cards.
+      The `id="jelajahi"` allows the hero button to scroll down to this section.
+    -->
+    <section id="jelajahi" class="w-full py-16 sm:py-24">
+      <div class="text-center mb-12 sm:mb-16">
+        <h2 class="text-3xl sm:text-4xl font-bold text-slate-800 tracking-tight">Jelajahi Data Kami</h2>
+        <p class="text-lg text-slate-600 mt-4 max-w-2xl mx-auto">
+          Pilih salah satu kategori di bawah ini untuk mulai menemukan kekayaan data yang kami sediakan.
+        </p>
+      </div>
+      
+      <!-- 
+        Grid layout for the navigation cards. 
+        It's responsive, showing 1, 2, or 3 columns depending on the screen size.
+      -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        
+        <!-- Card 1: Daftar Pura -->
+        <a href="/pura" class="group block bg-white p-8 rounded-2xl shadow-sm hover:shadow-xl border border-transparent hover:border-amber-500 transition-all duration-300 transform hover:-translate-y-2">
+          <div class="flex items-center justify-center w-16 h-16 mx-auto mb-6 rounded-2xl bg-amber-100 text-amber-600 group-hover:bg-amber-500 group-hover:text-white transition-all duration-300">
+            <!-- Custom SVG Icon for Pura -->
+            <svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21h20"/><path d="M3 15h1m16 0h1"/><path d="M4 21V10.74a2 2 0 0 1 .5-.92l4-3.5a2 2 0 0 1 2.82 0l4 3.5a2 2 0 0 1 .5.92V21"/><path d="M10 21v-5a2 2 0 1 1 4 0v5"/><path d="M15 21v-5a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v5"/></svg>
+          </div>
+          <h3 class="text-xl font-semibold text-slate-800 text-center mb-2">Daftar Pura</h3>
+          <p class="text-slate-500 text-center text-base">Lihat koleksi pura di Bali beserta detail informasi sejarah dan lokasinya.</p>
         </a>
-        <a href="/kabupaten" class="group block bg-white hs-card hs-card-bordered shadow-lg hover:shadow-2xl transition p-8 text-center border border-green-200 hover:border-green-500 rounded-2xl relative overflow-hidden">
-            <span class="flex items-center justify-center w-14 h-14 mx-auto mb-4 rounded-full bg-green-50 group-hover:bg-green-100 transition">
-                <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7v10a4 4 0 004 4h10a4 4 0 004-4V7M3 7a4 4 0 014-4h10a4 4 0 014 4M3 7h18"/></svg>
-            </span>
-            <span class="text-2xl font-semibold text-green-700 mb-2 block">Daftar Kabupaten</span>
-            <span class="text-gray-500 text-base">Jelajahi daftar kabupaten di Bali.</span>
+        
+        <!-- Card 2: Daftar Kabupaten -->
+        <a href="/kabupaten" class="group block bg-white p-8 rounded-2xl shadow-sm hover:shadow-xl border border-transparent hover:border-teal-500 transition-all duration-300 transform hover:-translate-y-2">
+          <div class="flex items-center justify-center w-16 h-16 mx-auto mb-6 rounded-2xl bg-teal-100 text-teal-600 group-hover:bg-teal-500 group-hover:text-white transition-all duration-300">
+            <!-- Custom SVG Icon for Kabupaten -->
+            <svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.3 15.3a2.4 2.4 0 0 1 0 3.4l-2.6 2.6a2.4 2.4 0 0 1-3.4 0L3 8.7a2.4 2.4 0 0 1 0-3.4l2.6-2.6a2.4 2.4 0 0 1 3.4 0Z"/><path d="m7.5 10.5 2 2"/><path d="m10.5 7.5 2 2"/><path d="m13.5 4.5 2 2"/><path d="m4.5 13.5 2 2"/></svg>
+          </div>
+          <h3 class="text-xl font-semibold text-slate-800 text-center mb-2">Daftar Kabupaten</h3>
+          <p class="text-slate-500 text-center text-base">Jelajahi setiap kabupaten di Bali dan temukan pura yang ada di wilayahnya.</p>
         </a>
-        <a href="/jenis_pura" class="group block bg-white hs-card hs-card-bordered shadow-lg hover:shadow-2xl transition p-8 text-center border border-purple-200 hover:border-purple-500 rounded-2xl relative overflow-hidden">
-            <span class="flex items-center justify-center w-14 h-14 mx-auto mb-4 rounded-full bg-purple-50 group-hover:bg-purple-100 transition">
-                <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h8m-4-4v8"/></svg>
-            </span>
-            <span class="text-2xl font-semibold text-purple-700 mb-2 block">Daftar Jenis Pura</span>
-            <span class="text-gray-500 text-base">Kenali berbagai jenis pura di Bali.</span>
+        
+        <!-- Card 3: Daftar Jenis Pura -->
+        <a href="/jenis_pura" class="group block bg-white p-8 rounded-2xl shadow-sm hover:shadow-xl border border-transparent hover:border-sky-500 transition-all duration-300 transform hover:-translate-y-2">
+          <div class="flex items-center justify-center w-16 h-16 mx-auto mb-6 rounded-2xl bg-sky-100 text-sky-600 group-hover:bg-sky-500 group-hover:text-white transition-all duration-300">
+            <!-- Custom SVG Icon for Jenis Pura -->
+            <svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12h-8"/><path d="M16 8v8"/><path d="M4 20v-4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v4"/><path d="M4 10V6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v4"/></svg>
+          </div>
+          <h3 class="text-xl font-semibold text-slate-800 text-center mb-2">Daftar Jenis Pura</h3>
+          <p class="text-slate-500 text-center text-base">Kenali berbagai klasifikasi dan jenis pura yang ada dalam tradisi Bali.</p>
         </a>
-    </div>
-</section>
-{% endblock %} 
+        
+      </div>
+    </section>
+
+  </div>
+</div>
+{% endblock %}

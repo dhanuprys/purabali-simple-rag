@@ -35,12 +35,22 @@ async def index(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
 @app.get("/pura", response_class=HTMLResponse)
-async def pura_list(request: Request):
-    url = str(request.base_url).rstrip("/") + f"{API_PREFIX}/pura"
+async def pura_list(request: Request, q: str = "", jenis: str = "", kabupaten: str = "", page: int = 1):
     async with httpx.AsyncClient() as client:
-        resp = await client.get(url)
-        pura_list = resp.json()
-    return templates.TemplateResponse("pura_list.html", {"request": request, "pura_list": pura_list})
+        # Fetch filter options for the dropdowns
+        jenis_resp = await client.get(str(request.base_url).rstrip("/") + "/api/jenis_pura")
+        kabupaten_resp = await client.get(str(request.base_url).rstrip("/") + "/api/kabupaten")
+        jenis_pura_list = jenis_resp.json()
+        kabupaten_list = kabupaten_resp.json()
+    return templates.TemplateResponse("pura_list.html", {
+        "request": request, 
+        "jenis_pura_list": jenis_pura_list, 
+        "kabupaten_list": kabupaten_list, 
+        "q": q, 
+        "jenis": jenis, 
+        "kabupaten": kabupaten,
+        "page": page
+    })
 
 @app.get("/pura/{id_pura}", response_class=HTMLResponse)
 async def pura_detail(request: Request, id_pura: str):
@@ -67,3 +77,7 @@ async def jenis_pura_list(request: Request):
         resp = await client.get(url)
         jenis_pura_list = resp.json()
     return templates.TemplateResponse("jenis_pura_list.html", {"request": request, "jenis_pura_list": jenis_pura_list})
+
+@app.get("/chat")
+async def chat_page(request: Request):
+    return templates.TemplateResponse("chat.html", {"request": request})
