@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block title %}Detail Pura{% endblock %}
+{% block content %}
+<div class="max-w-2xl mx-auto bg-white hs-card hs-card-bordered shadow-2xl p-8 mt-8 rounded-3xl">
+    {% if pura.link_gambar %}
+    <div class="mb-6 flex justify-center">
+        <img src="{{ pura.link_gambar }}" alt="Gambar Pura" class="rounded-xl shadow max-h-72 w-full object-cover">
+    </div>
+    {% endif %}
+    <h2 class="text-3xl font-extrabold text-blue-900 mb-4">{{ pura.nama_pura }}</h2>
+    <ul class="mb-6 space-y-2 text-lg">
+        <li><span class="hs-badge hs-badge-blue font-semibold">{{ pura.nama_jenis_pura }}</span></li>
+        <li><span class="hs-badge hs-badge-success font-semibold">{{ pura.nama_kabupaten }}</span></li>
+        <li><span class="font-semibold text-gray-700">Deskripsi:</span> {{ pura.deskripsi_singkat }}</li>
+        <li><span class="font-semibold text-gray-700">Tahun Berdiri:</span> {{ pura.tahun_berdiri }}</li>
+        <li><span class="font-semibold text-gray-700">Lokasi:</span> {% if pura.link_lokasi %}<a href="{{ pura.link_lokasi }}" target="_blank" class="text-blue-600 hover:underline">Maps</a>{% endif %}</li>
+    </ul>
+    <a href="/pura" class="hs-btn hs-btn-primary bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition font-semibold shadow">Kembali ke daftar pura</a>
+</div>
+{% endblock %} 

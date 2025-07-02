@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Purabali Data{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://unpkg.com/preline@latest/dist/preline.css">
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col">
+    <header class="sticky top-0 z-30 bg-white/80 backdrop-blur border-b border-blue-100 shadow-sm">
+        <nav class="container mx-auto px-4 flex items-center justify-between h-20">
+            <div class="flex items-center gap-3">
+                <a href="/" class="flex items-center gap-2">
+                    <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-tr from-blue-700 to-blue-400 text-white shadow-lg">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.364-6.364l-1.414 1.414M6.343 17.657l-1.414 1.414M17.657 17.657l-1.414-1.414M6.343 6.343L4.929 7.757" /></svg>
+                    </span>
+                    <span class="text-2xl font-extrabold text-blue-800 tracking-tight">Purabali</span>
+                </a>
+            </div>
+            <div class="flex items-center gap-2 md:gap-6">
+                <a href="/" class="hs-btn hs-btn-link text-blue-800 font-semibold px-3 py-2 rounded-lg hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-400 transition">Home</a>
+                <a href="/pura" class="hs-btn hs-btn-link text-blue-800 font-semibold px-3 py-2 rounded-lg hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-400 transition">Pura</a>
+                <a href="/kabupaten" class="hs-btn hs-btn-link text-blue-800 font-semibold px-3 py-2 rounded-lg hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-400 transition">Kabupaten</a>
+                <a href="/jenis_pura" class="hs-btn hs-btn-link text-blue-800 font-semibold px-3 py-2 rounded-lg hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-400 transition">Jenis Pura</a>
+            </div>
+        </nav>
+    </header>
+    <main class="container mx-auto px-4 py-8 flex-1">
+        {% block content %}{% endblock %}
+    </main>
+    <footer class="bg-gradient-to-t from-blue-700 to-blue-500 text-white text-center py-6 mt-8">
+        <div class="flex flex-col items-center justify-center gap-2">
+            <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-white/20">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.364-6.364l-1.414 1.414M6.343 17.657l-1.414 1.414M17.657 17.657l-1.414-1.414M6.343 6.343L4.929 7.757" /></svg>
+            </span>
+            <span class="text-sm font-medium">&copy; 2024 Purabali. All rights reserved.</span>
+        </div>
+    </footer>
+    <script src="https://unpkg.com/preline@latest/dist/preline.js"></script>
+</body>
+</html> 

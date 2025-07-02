@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block title %}Daftar Jenis Pura{% endblock %}
+{% block content %}
+<h2 class="text-3xl font-bold text-blue-800 mb-6 text-center">Daftar Jenis Pura</h2>
+<div class="max-w-lg mx-auto hs-card hs-card-bordered bg-white shadow-md rounded-xl">
+  <ul class="hs-list-group divide-y divide-blue-100">
+    {% for jenis in jenis_pura_list %}
+      <li class="hs-list-group-item py-4 px-6 text-lg">{{ jenis.nama_jenis_pura }}</li>
+    {% endfor %}
+  </ul>
+</div>
+{% endblock %} 

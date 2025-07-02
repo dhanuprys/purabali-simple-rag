@@ -5,3 +5,5 @@ faiss-cpu
 google-genai
 mysql-connector-python
 python-dotenv
+fastapi[all]
+jinja2

@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block title %}Daftar Kabupaten{% endblock %}
+{% block content %}
+<h2 class="text-3xl font-bold text-blue-800 mb-6 text-center">Daftar Kabupaten</h2>
+<div class="max-w-lg mx-auto hs-card hs-card-bordered bg-white shadow-md rounded-xl">
+  <ul class="hs-list-group divide-y divide-blue-100">
+    {% for kab in kabupaten_list %}
+      <li class="hs-list-group-item py-4 px-6 text-lg">{{ kab.nama_kabupaten }}</li>
+    {% endfor %}
+  </ul>
+</div>
+{% endblock %} 
