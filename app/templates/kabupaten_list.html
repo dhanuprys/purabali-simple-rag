@@ -14,23 +14,11 @@
         </p>
     </div>
 
-    <!-- 
-      Kabupaten Grid
-      - A responsive grid layout for the regency cards.
-      - Adjusts from 1 to 3 columns based on screen size.
-    -->
+    <!-- Kabupaten Grid -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         {% for kab in kabupaten_list %}
-        <!-- 
-          Kabupaten Card
-          - Each card links to the temple list, pre-filtered by that regency.
-          - Uses the `urlencode` filter to ensure the URL is correctly formatted.
-          - Features interactive hover effects consistent with the site's design system.
-          - Displays the count of temples in that regency.
-        -->
-        <a href="/pura?kabupaten={{ kab.nama_kabupaten|urlencode }}" class="group block bg-white p-8 rounded-2xl shadow-sm hover:shadow-xl border border-transparent hover:border-teal-400 transition-all duration-300 transform hover:-translate-y-2">
+        <a href="/pura?kabupaten={{ kab.nama_kabupaten|urlencode }}" class="group block bg-white p-8 rounded-2xl shadow-sm hover:shadow-xl border border-slate-200/80 hover:border-teal-400 transition-all duration-300 transform hover:-translate-y-1">
             <div class="flex items-center justify-center w-16 h-16 mx-auto mb-6 rounded-2xl bg-teal-100 text-teal-600 group-hover:bg-teal-500 group-hover:text-white transition-all duration-300">
-                <!-- Icon for map/location -->
                 <svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/>
                     <circle cx="12" cy="10" r="3"/>
@@ -42,11 +30,6 @@
             </p>
         </a>
         {% else %}
-        <!-- 
-          Empty State Message
-          - This block is displayed if the `kabupaten_list` is empty.
-          - It spans all columns of the grid to be centered on the page.
-        -->
         <div class="col-span-1 sm:col-span-2 lg:col-span-3 text-center py-16">
             <svg class="w-16 h-16 mx-auto text-slate-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M17.5 2.5a2.5 2.5 0 0 1 0 5L8.5 18.5a2.5 2.5 0 0 1-5 0 2.5 2.5 0 0 1 0-5L15.5 2.5a2.5 2.5 0 0 1 5 0Z"/><path d="m15 19-6-6"/>
@@ -56,6 +39,5 @@
         </div>
         {% endfor %}
     </div>
-
 </div>
 {% endblock %}

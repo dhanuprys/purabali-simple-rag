@@ -14,22 +14,11 @@
         </p>
     </div>
 
-    <!-- 
-      Jenis Pura Grid
-      - A responsive grid layout for the temple type cards.
-      - Adjusts from 1 to 3 columns based on screen size.
-    -->
+    <!-- Jenis Pura Grid -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         {% for jenis in jenis_pura_list %}
-        <!-- 
-          Jenis Pura Card
-          - Each card links to the temple list, pre-filtered by that temple type.
-          - Uses the `urlencode` filter to ensure the URL is correctly formatted.
-          - Features interactive hover effects consistent with the site's design system.
-        -->
-        <a href="/pura?jenis={{ jenis.nama_jenis_pura|urlencode }}" class="group block bg-white p-8 rounded-2xl shadow-sm hover:shadow-xl border border-transparent hover:border-sky-400 transition-all duration-300 transform hover:-translate-y-2">
+        <a href="/pura?jenis={{ jenis.nama_jenis_pura|urlencode }}" class="group block bg-white p-8 rounded-2xl shadow-sm hover:shadow-xl border border-slate-200/80 hover:border-sky-400 transition-all duration-300 transform hover:-translate-y-1">
             <div class="flex items-center justify-center w-16 h-16 mx-auto mb-6 rounded-2xl bg-sky-100 text-sky-600 group-hover:bg-sky-500 group-hover:text-white transition-all duration-300">
-                <!-- Icon for categories/types -->
                 <svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M20 12h-8"/><path d="M16 8v8"/><path d="M4 20v-4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v4"/><path d="M4 10V6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v4"/>
                 </svg>
@@ -40,11 +29,6 @@
             </p>
         </a>
         {% else %}
-        <!-- 
-          Empty State Message
-          - This block is displayed if the `jenis_pura_list` is empty.
-          - It spans all columns of the grid to be centered on the page.
-        -->
         <div class="col-span-1 sm:col-span-2 lg:col-span-3 text-center py-16">
             <svg class="w-16 h-16 mx-auto text-slate-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M21.25 2.75H2.75a.5.5 0 0 0-.5.5v17.5a.5.5 0 0 0 .5.5h18.5a.5.5 0 0 0 .5-.5V3.25a.5.5 0 0 0-.5-.5Z"/><path d="M7 15.5v-4a.5.5 0 0 0-1 0v4a.5.5 0 0 0 1 0Z"/><path d="M12 15.5v-7a.5.5 0 0 0-1 0v7a.5.5 0 0 0 1 0Z"/><path d="M17 15.5v-1a.5.5 0 0 0-1 0v1a.5.5 0 0 0 1 0Z"/>
@@ -54,6 +38,5 @@
         </div>
         {% endfor %}
     </div>
-
 </div>
 {% endblock %}

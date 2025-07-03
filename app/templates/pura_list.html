@@ -14,57 +14,60 @@
         </p>
     </div>
 
-    <!-- 
-      Filter Section
-      - Now triggers an API call on change instead of client-side filtering.
-    -->
-    <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-slate-200/80 mb-8">
-        <form id="filter-form" method="get" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 items-end">
-            <!-- Search Input -->
-            <div class="lg:col-span-2">
-                <label for="search-q" class="block text-sm font-medium text-slate-700 mb-1">Nama Pura</label>
-                <div class="relative">
-                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                        <svg class="w-5 h-5 text-slate-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+    <!-- Filter Section with Toggle -->
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200/80 mb-8">
+        <!-- Filter Header with Toggle Button -->
+        <div class="flex justify-between items-center p-4 sm:p-6 cursor-pointer" id="toggle-filter-header">
+            <h3 class="text-lg font-semibold text-slate-800">Filter Pencarian</h3>
+            <button type="button" id="toggle-filter-btn" class="p-2 rounded-full text-slate-500 hover:bg-slate-100 hover:text-slate-800 transition-colors">
+                <svg id="toggle-filter-icon" class="w-5 h-5 transition-transform duration-300" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
+            </button>
+        </div>
+        
+        <!-- Collapsible Filter Form -->
+        <div id="filter-form-container" class="transition-all duration-500 ease-in-out overflow-hidden">
+            <div class="px-6 sm:px-8 pb-6 sm:pb-8 pt-2">
+                <form id="filter-form" method="get" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 items-end">
+                    <div class="lg:col-span-2">
+                        <label for="search-q" class="block text-sm font-medium text-slate-700 mb-1">Nama Pura</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                <svg class="w-5 h-5 text-slate-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                            </div>
+                            <input type="text" id="search-q" name="q" value="{{ q|default('') }}" placeholder="Contoh: Pura Besakih" class="w-full pl-10 pr-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500 focus:outline-none transition" />
+                        </div>
                     </div>
-                    <input type="text" id="search-q" name="q" value="{{ q|default('') }}" placeholder="Contoh: Pura Besakih" class="w-full pl-10 pr-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 focus:outline-none transition" />
-                </div>
+                    <div>
+                        <label for="filter-jenis" class="block text-sm font-medium text-slate-700 mb-1">Jenis Pura</label>
+                        <select id="filter-jenis" name="jenis" class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500 focus:outline-none transition">
+                            <option value="">Semua Jenis</option>
+                            {% for jenis_item in jenis_pura_list %}
+                            <option value="{{ jenis_item.nama_jenis_pura }}" {% if jenis_item.nama_jenis_pura == jenis %}selected{% endif %}>{{ jenis_item.nama_jenis_pura }} ({{ jenis_item.pura_count }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div>
+                        <label for="filter-kabupaten" class="block text-sm font-medium text-slate-700 mb-1">Kabupaten</label>
+                        <select id="filter-kabupaten" name="kabupaten" class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500 focus:outline-none transition">
+                            <option value="">Semua Kabupaten</option>
+                            {% for kab_item in kabupaten_list %}
+                            <option value="{{ kab_item.nama_kabupaten }}" {% if kab_item.nama_kabupaten == kabupaten %}selected{% endif %}>{{ kab_item.nama_kabupaten }} ({{ kab_item.pura_count }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="flex items-center">
+                        <button type="button" id="reset-filters-btn" class="w-full inline-flex items-center justify-center rounded-lg bg-slate-200 px-6 py-2.5 text-sm font-semibold text-slate-700 shadow-sm hover:bg-slate-300 transition-colors">
+                            Reset
+                        </button>
+                    </div>
+                </form>
             </div>
-
-            <!-- Filter by Type -->
-            <div>
-                <label for="filter-jenis" class="block text-sm font-medium text-slate-700 mb-1">Jenis Pura</label>
-                <select id="filter-jenis" name="jenis" class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 focus:outline-none transition">
-                    <option value="">Semua Jenis</option>
-                    {% for jenis_item in jenis_pura_list %}
-                    <option value="{{ jenis_item.nama_jenis_pura }}" {% if jenis_item.nama_jenis_pura == jenis %}selected{% endif %}>{{ jenis_item.nama_jenis_pura }} ({{ jenis_item.pura_count }})</option>
-                    {% endfor %}
-                </select>
-            </div>
-
-            <!-- Filter by Regency -->
-            <div>
-                <label for="filter-kabupaten" class="block text-sm font-medium text-slate-700 mb-1">Kabupaten</label>
-                <select id="filter-kabupaten" name="kabupaten" class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 focus:outline-none transition">
-                    <option value="">Semua Kabupaten</option>
-                    {% for kab_item in kabupaten_list %}
-                    <option value="{{ kab_item.nama_kabupaten }}" {% if kab_item.nama_kabupaten == kabupaten %}selected{% endif %}>{{ kab_item.nama_kabupaten }} ({{ kab_item.pura_count }})</option>
-                    {% endfor %}
-                </select>
-            </div>
-
-            <!-- Action Buttons -->
-            <div class="flex items-center">
-                <button type="button" id="reset-filters-btn" class="w-full inline-flex items-center justify-center rounded-lg bg-slate-200 px-6 py-2.5 text-sm font-semibold text-slate-700 shadow-sm hover:bg-slate-300 transition-colors">
-                    Reset
-                </button>
-            </div>
-        </form>
+        </div>
     </div>
 
-    <!-- UX Improvement: Loading State -->
+    <!-- Loading & Results Summary -->
     <div id="loading-state" class="text-center py-16" style="display: none;">
-        <div class="inline-flex items-center px-4 py-2 font-semibold leading-6 text-slate-600 shadow-sm">
+        <div class="inline-flex items-center px-4 py-2 font-semibold leading-6 text-slate-600">
             <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-amber-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
@@ -72,33 +75,23 @@
             Memuat data...
         </div>
     </div>
-
-    <!-- Results Summary -->
     <div id="results-summary" class="mb-8 text-sm text-slate-600"></div>
 
-    <!-- Results Grid - Content is now loaded dynamically -->
+    <!-- Results Grid -->
     <div id="pura-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <!-- Cards will be loaded here by JavaScript -->
+        <!-- Cards are loaded here by JavaScript -->
     </div>
 
-    <!-- UX Improvement: Pagination Controls (Made responsive) -->
+    <!-- Pagination -->
     <div id="pagination-controls" class="mt-12 flex flex-wrap items-center justify-center gap-x-2 gap-y-4" style="display: none;">
-        <button id="prev-page-btn" class="inline-flex items-center px-3 sm:px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-            </svg>
+        <button id="prev-page-btn" class="inline-flex items-center px-3 sm:px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-100 disabled:opacity-50 disabled:cursor-not-allowed">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
             <span class="hidden sm:inline ml-2">Sebelumnya</span>
         </button>
-        
-        <div id="page-numbers" class="flex items-center space-x-1">
-            <!-- Page numbers will be generated here -->
-        </div>
-        
-        <button id="next-page-btn" class="inline-flex items-center px-3 sm:px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed">
+        <div id="page-numbers" class="flex items-center space-x-1"></div>
+        <button id="next-page-btn" class="inline-flex items-center px-3 sm:px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-100 disabled:opacity-50 disabled:cursor-not-allowed">
             <span class="hidden sm:inline mr-2">Selanjutnya</span>
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-            </svg>
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
         </button>
     </div>
 
@@ -111,7 +104,6 @@
             Reset Filter
         </button>
     </div>
-
 </div>
 {% endblock %}
 
@@ -132,12 +124,16 @@ document.addEventListener('DOMContentLoaded', function () {
     const nextPageBtn = document.getElementById('next-page-btn');
     const pageNumbers = document.getElementById('page-numbers');
     const filterForm = document.getElementById('filter-form');
+    
+    // New elements for collapsible filter
+    const toggleFilterHeader = document.getElementById('toggle-filter-header');
+    const toggleFilterIcon = document.getElementById('toggle-filter-icon');
+    const filterFormContainer = document.getElementById('filter-form-container');
 
     let currentPage = 1;
     let currentFilters = {};
-    const PAGE_SIZE = 12; // Define page size as a constant
+    const PAGE_SIZE = 12;
 
-    // Debounce function
     function debounce(func, wait) {
         let timeout;
         return function executedFunction(...args) {
@@ -150,13 +146,8 @@ document.addEventListener('DOMContentLoaded', function () {
         };
     }
 
-    // Fetch data from API
     async function fetchPuraData(page = 1, filters = {}) {
-        const params = new URLSearchParams({
-            page: page.toString(),
-            limit: PAGE_SIZE.toString() // Use the constant
-        });
-
+        const params = new URLSearchParams({ page: page.toString(), limit: PAGE_SIZE.toString() });
         if (filters.q) params.set('q', filters.q);
         if (filters.jenis) params.set('jenis', filters.jenis);
         if (filters.kabupaten) params.set('kabupaten', filters.kabupaten);
@@ -168,14 +159,9 @@ document.addEventListener('DOMContentLoaded', function () {
             noResultsMessage.style.display = 'none';
             paginationControls.style.display = 'none';
 
-            // NOTE: Replace '/api/pura' with your actual API endpoint
             const response = await fetch(`/api/pura?${params.toString()}`);
-            if (!response.ok) {
-                throw new Error('Failed to fetch data from API');
-            }
-
-            const data = await response.json();
-            return data;
+            if (!response.ok) throw new Error('Failed to fetch data from API');
+            return await response.json();
         } catch (error) {
             console.error('Error fetching data:', error);
             resultsSummary.textContent = 'Terjadi kesalahan saat memuat data.';
@@ -186,50 +172,30 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // Render pura cards
     function renderPuraCards(puraList) {
         if (!puraList || puraList.length === 0) {
             puraGrid.style.display = 'none';
             noResultsMessage.style.display = 'block';
             return;
         }
-
         puraGrid.style.display = 'grid';
         noResultsMessage.style.display = 'none';
-
         puraGrid.innerHTML = puraList.map(pura => `
-            <a href="/pura/${pura.id_pura}" 
-               class="pura-card group flex flex-col h-full bg-white rounded-2xl shadow-sm hover:shadow-xl border border-transparent hover:border-amber-300 transition-all duration-300 transform hover:-translate-y-1 overflow-hidden">
-                
-                <!-- Image container with fixed height -->
+            <a href="/pura/${pura.id_pura}" class="group flex flex-col h-full bg-white rounded-2xl shadow-sm hover:shadow-xl border border-slate-200/80 hover:border-amber-300 transition-all duration-300 transform hover:-translate-y-1 overflow-hidden">
                 <div class="h-48 w-full overflow-hidden">
-                    <img src="${pura.link_gambar || 'https://placehold.co/600x400/e2e8f0/94a3b8?text=Pura'}" 
-                         alt="Gambar ${pura.nama_pura}" 
-                         class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500">
+                    <img src="${pura.link_gambar || 'https://placehold.co/600x400/e2e8f0/94a3b8?text=Pura'}" alt="Gambar ${pura.nama_pura}" class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500">
                 </div>
-
-                <!-- Content container -->
                 <div class="p-6 flex flex-col flex-grow">
-                    <!-- Text content area -->
                     <div class="flex-grow">
                         <div class="flex flex-wrap gap-2 mb-3">
-                            <span class="inline-flex items-center gap-x-1.5 py-1 px-2.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800">
-                                ${pura.nama_jenis_pura}
-                            </span>
-                            <span class="inline-flex items-center gap-x-1.5 py-1 px-2.5 rounded-full text-xs font-medium bg-teal-100 text-teal-800">
-                                ${pura.nama_kabupaten}
-                            </span>
+                            <span class="inline-flex items-center gap-x-1.5 py-1 px-2.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800">${pura.nama_jenis_pura}</span>
+                            <span class="inline-flex items-center gap-x-1.5 py-1 px-2.5 rounded-full text-xs font-medium bg-teal-100 text-teal-800">${pura.nama_kabupaten}</span>
                         </div>
                         <h3 class="text-xl font-semibold text-slate-800 mb-2 truncate group-hover:text-amber-700" title="${pura.nama_pura}">${pura.nama_pura}</h3>
-                        <p class="text-slate-600 text-sm leading-relaxed line-clamp-3">
-                            ${pura.deskripsi_singkat}
-                        </p>
+                        <p class="text-slate-600 text-sm leading-relaxed line-clamp-3">${pura.deskripsi_singkat}</p>
                     </div>
-                    <!-- "Lihat Detail" link at the bottom -->
                     <div class="mt-4 pt-4 border-t border-slate-100 flex justify-end items-center">
-                         <span class="text-sm font-medium text-amber-700 group-hover:underline">
-                            Lihat Detail
-                         </span>
+                         <span class="text-sm font-medium text-amber-700 group-hover:underline">Lihat Detail</span>
                          <svg class="ml-1.5 w-4 h-4 text-amber-700 transform transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                     </div>
                 </div>
@@ -237,88 +203,67 @@ document.addEventListener('DOMContentLoaded', function () {
         `).join('');
     }
 
-    // Render pagination controls
     function renderPagination(pagination) {
         if (!pagination || pagination.total_pages <= 1) {
             paginationControls.style.display = 'none';
             return;
         }
-
         paginationControls.style.display = 'flex';
         prevPageBtn.disabled = !pagination.has_prev;
         nextPageBtn.disabled = !pagination.has_next;
-
         const pages = [];
         const current = pagination.page;
         const total = pagination.total_pages;
         const maxVisible = 5;
-
         let start = Math.max(1, current - Math.floor(maxVisible / 2));
         let end = Math.min(total, start + maxVisible - 1);
-        if (end - start + 1 < maxVisible) {
-            start = Math.max(1, end - maxVisible + 1);
-        }
-
+        if (end - start + 1 < maxVisible) start = Math.max(1, end - maxVisible + 1);
         if (start > 1) {
-            pages.push('<button class="page-btn px-3 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50" data-page="1">1</button>');
+            pages.push('<button class="page-btn px-3 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-100" data-page="1">1</button>');
             if (start > 2) pages.push('<span class="px-3 py-2 text-sm text-slate-500">...</span>');
         }
-
         for (let i = start; i <= end; i++) {
             const isActive = i === current;
-            pages.push(`<button class="page-btn px-3 py-2 text-sm font-medium ${isActive ? 'text-white bg-amber-600 border-amber-600 cursor-default' : 'text-slate-700 bg-white border-slate-300 hover:bg-slate-50'}" data-page="${i}" ${isActive ? 'disabled' : ''}>${i}</button>`);
+            pages.push(`<button class="page-btn px-3 py-2 text-sm font-medium ${isActive ? 'text-white bg-amber-600 border-amber-600 cursor-default' : 'text-slate-700 bg-white border-slate-300 hover:bg-slate-100'}" data-page="${i}" ${isActive ? 'disabled' : ''}>${i}</button>`);
         }
-
         if (end < total) {
             if (end < total - 1) pages.push('<span class="px-3 py-2 text-sm text-slate-500">...</span>');
-            pages.push(`<button class="page-btn px-3 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50" data-page="${total}">${total}</button>`);
+            pages.push(`<button class="page-btn px-3 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-100" data-page="${total}">${total}</button>`);
         }
         pageNumbers.innerHTML = pages.join('');
     }
 
-    // Update results summary
     function updateResultsSummary(pagination) {
         if (!pagination || typeof pagination.total === 'undefined') {
             resultsSummary.style.display = 'none';
             return;
         }
-
         resultsSummary.style.display = 'block';
         if (pagination.total === 0) {
             resultsSummary.textContent = 'Tidak ada pura yang cocok dengan filter Anda.';
             return;
         }
-
         const startItem = (pagination.page - 1) * PAGE_SIZE + 1;
         const endItem = Math.min(startItem + PAGE_SIZE - 1, pagination.total);
         resultsSummary.textContent = `Menampilkan ${startItem} - ${endItem} dari ${pagination.total} pura.`;
     }
 
-    // Load data and update UI
     async function loadData(page = 1, filters = {}) {
         const data = await fetchPuraData(page, filters);
         if (!data) return;
-
         renderPuraCards(data.data);
         renderPagination(data.pagination);
         updateResultsSummary(data.pagination);
-
         const params = new URLSearchParams();
         if (filters.q) params.set('q', filters.q);
         if (filters.jenis) params.set('jenis', filters.jenis);
         if (filters.kabupaten) params.set('kabupaten', filters.kabupaten);
         if (page > 1) params.set('page', page.toString());
-        
-        const newUrl = `${window.location.pathname}?${params.toString()}`;
-        history.pushState({page, filters}, '', newUrl);
+        history.pushState({page, filters}, '', `${window.location.pathname}?${params.toString()}`);
     }
 
     function applyFilters() {
-        const filters = {
-            q: searchInput.value.trim(),
-            jenis: jenisSelect.value,
-            kabupaten: kabupatenSelect.value
-        };
+        const filters = { q: searchInput.value.trim(), jenis: jenisSelect.value, kabupaten: kabupatenSelect.value };
         currentFilters = filters;
         currentPage = 1;
         loadData(currentPage, filters);
@@ -330,60 +275,67 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     const debouncedApplyFilters = debounce(applyFilters, 400);
-
     searchInput.addEventListener('input', debouncedApplyFilters);
     jenisSelect.addEventListener('change', applyFilters);
     kabupatenSelect.addEventListener('change', applyFilters);
     resetButton.addEventListener('click', resetFilters);
     resetButtonAlt.addEventListener('click', resetFilters);
-
-    prevPageBtn.addEventListener('click', () => {
-        if (currentPage > 1) loadData(--currentPage, currentFilters);
-    });
-    nextPageBtn.addEventListener('click', () => {
-        loadData(++currentPage, currentFilters);
-    });
-    pageNumbers.addEventListener('click', (e) => {
-        if (e.target.matches('.page-btn')) {
-            loadData(parseInt(e.target.dataset.page), currentFilters);
-        }
-    });
-
+    prevPageBtn.addEventListener('click', () => { if (currentPage > 1) loadData(--currentPage, currentFilters); });
+    nextPageBtn.addEventListener('click', () => { loadData(++currentPage, currentFilters); });
+    pageNumbers.addEventListener('click', (e) => { if (e.target.matches('.page-btn')) loadData(parseInt(e.target.dataset.page), currentFilters); });
     filterForm.addEventListener('submit', (e) => e.preventDefault());
-    
-    window.addEventListener('popstate', (e) => {
-        if (e.state) {
-            loadData(e.state.page, e.state.filters);
+    window.addEventListener('popstate', (e) => { if (e.state) loadData(e.state.page, e.state.filters); });
+
+    // Collapsible filter logic
+    const toggleFilter = () => {
+        const isHidden = filterFormContainer.style.maxHeight === '0px';
+        if (isHidden) {
+            filterFormContainer.style.maxHeight = filterFormContainer.scrollHeight + 'px';
+            toggleFilterIcon.style.transform = 'rotate(0deg)';
+        } else {
+            filterFormContainer.style.maxHeight = '0px';
+            toggleFilterIcon.style.transform = 'rotate(180deg)';
         }
-    });
-
-    // Initialize with URL parameters
-    const urlParams = new URLSearchParams(window.location.search);
-    const initialFilters = {
-        q: urlParams.get('q') || '',
-        jenis: urlParams.get('jenis') || '',
-        kabupaten: urlParams.get('kabupaten') || ''
     };
-    const initialPage = parseInt(urlParams.get('page')) || 1;
 
+    const setupInitialFilterState = () => {
+        // Use 768px as the breakpoint for 'md' screens
+        if (window.innerWidth < 768) {
+            filterFormContainer.style.maxHeight = '0px';
+            toggleFilterIcon.style.transform = 'rotate(180deg)';
+        } else {
+            filterFormContainer.style.maxHeight = filterFormContainer.scrollHeight + 'px';
+            toggleFilterIcon.style.transform = 'rotate(0deg)';
+        }
+    };
+    
+    // Set initial state and attach listener
+    setupInitialFilterState();
+    toggleFilterHeader.addEventListener('click', toggleFilter);
+
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const initialFilters = { q: urlParams.get('q') || '', jenis: urlParams.get('jenis') || '', kabupaten: urlParams.get('kabupaten') || '' };
+    const initialPage = parseInt(urlParams.get('page')) || 1;
     searchInput.value = initialFilters.q;
     jenisSelect.value = initialFilters.jenis;
     kabupatenSelect.value = initialFilters.kabupaten;
-
     currentFilters = initialFilters;
     currentPage = initialPage;
     loadData(currentPage, initialFilters);
 });
 </script>
 <style>
-    .pura-card {
-        transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
-    }
     .line-clamp-3 {
         display: -webkit-box;
         -webkit-line-clamp: 3;
         -webkit-box-orient: vertical;
         overflow: hidden;
+    }
+    #filter-form-container.hidden-filter {
+        padding-top: 0;
+        padding-bottom: 0;
+        border-top: 0;
     }
 </style>
 {% endblock %}

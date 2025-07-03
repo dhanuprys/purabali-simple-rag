@@ -1,19 +1,41 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id" class="h-full">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Purabali Chat Assistant</title>
+    <title>Asisten Virtual - PuraBali</title>
+    
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdn.jsdelivr.net/npm/preline@latest/dist/preline.min.css" rel="stylesheet">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    
+    <!-- Custom Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                },
+            },
+        };
+    </script>
+    
+    <!-- Any extra CSS can go here -->
+    {% block extra_css %}{% endblock %}
 </head>
-<body class="bg-white">
-    <!-- Main Content -->
-    <main class="h-screen">
+<body class="h-full bg-slate-200 flex items-center justify-center p-4">
+    <main class="h-full w-full">
         {% block content %}{% endblock %}
     </main>
-
-    <script src="https://unpkg.com/preline@latest/dist/preline.js"></script>
+    
+    <!-- Extra JS block for page-specific scripts -->
     {% block extra_js %}{% endblock %}
 </body>
-</html> 
+</html>

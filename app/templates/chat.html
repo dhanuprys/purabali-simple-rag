@@ -1,86 +1,52 @@
-{% extends "chat_layout.html" %}
+{% extends 'chat_layout.html' %}
 
 {% block content %}
-<div class="h-full flex justify-center">
-    <!-- Chat Container with max width -->
-    <div class="flex flex-col h-full bg-white w-full max-w-5xl">
-        <!-- Chat Header -->
-        <div class="flex flex-col border-b border-gray-100 bg-white/80 backdrop-blur-sm">
-            <!-- Logo Row -->
-            <div class="flex items-center justify-between px-3 py-2.5">
-                <div class="flex items-center">
-                    <span class="inline-flex items-center justify-center h-9 w-9 rounded-xl bg-gradient-to-tr from-blue-600 to-blue-500 text-white shadow-sm">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.364-6.364l-1.414 1.414M6.343 17.657l-1.414 1.414M17.657 17.657l-1.414-1.414M6.343 6.343L4.929 7.757" />
-                        </svg>
-                    </span>
-                    <span class="ml-2 text-lg font-semibold text-blue-600">Pura</span><span class="text-lg font-semibold text-gray-700">Bali</span>
-                </div>
-                <a href="/" class="p-1.5 text-gray-500 hover:text-blue-600 transition-colors" aria-label="Kembali ke Beranda">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                    </svg>
-                </a>
-            </div>
-            <!-- Assistant Info Row -->
-            <div class="px-3 pb-2">
-                <h2 class="text-base font-medium text-gray-700">Asisten Virtual</h2>
-                <p class="text-sm text-gray-500">Tanyakan tentang pura-pura di Bali</p>
-            </div>
+<!-- 
+  Main Chat Container
+  - Inspired by Gemini UI for a clean, modern, and focused experience.
+-->
+<div class="flex flex-col h-full bg-slate-50 w-full max-w-4xl mx-auto">
+    
+    <!-- Chat Header -->
+    <div class="flex-shrink-0 flex items-center justify-between px-4 sm:px-6 py-3 bg-slate-50 border-b border-slate-200">
+        <div class="flex items-center gap-3">
+            <a href="/" class="p-2 text-slate-500 hover:text-slate-800 transition-colors rounded-full" aria-label="Kembali ke Beranda">
+                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+            </a>
+            <h1 class="text-lg font-semibold text-slate-800">Asisten Virtual</h1>
         </div>
-
-        <!-- Messages Container -->
-        <div id="messages" class="flex-1 overflow-y-auto px-2 py-3 sm:p-4 space-y-4 pb-40 sm:pb-48">
-            <!-- Welcome Message -->
-            <div class="flex items-start">
-                <div class="flex-shrink-0">
-                    <span class="inline-flex items-center justify-center h-9 w-9 rounded-full bg-blue-600">
-                        <span class="text-sm font-medium text-white">AI</span>
-                    </span>
-                </div>
-                <div class="ml-3">
-                    <div class="bg-gray-100 rounded-xl p-4 max-w-2xl">
-                        <p class="text-sm text-gray-800">
-                            Selamat datang! Saya adalah asisten virtual yang dapat membantu Anda menemukan informasi tentang pura-pura di Bali. 
-                            Anda dapat bertanya tentang lokasi, sejarah, atau informasi umum tentang pura tertentu.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Input Form -->
-        <div class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-5xl bg-white/95 backdrop-blur-sm border-t border-gray-200 px-2 py-3 sm:p-4 shadow-lg">
-            <form id="chat-form" class="flex space-x-2 sm:space-x-4" onsubmit="return false;">
-                <div class="relative flex-1">
-                    <textarea id="message-input" 
-                        class="py-3 px-3 sm:px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
-                        placeholder="Ketik pesan Anda di sini..."
-                        rows="1"></textarea>
-                </div>
-                <button type="button" 
-                    class="py-3 px-3 sm:px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none">
-                    <svg class="flex-shrink-0 w-4 h-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <line x1="22" y1="2" x2="11" y2="13"></line>
-                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-                    </svg>
-                    <span class="hidden sm:inline">Kirim</span>
-                </button>
-            </form>
+        <div class="flex items-center gap-2">
+             <button id="new-chat-btn" class="p-2 text-slate-500 hover:text-slate-800 transition-colors rounded-full" aria-label="Mulai Chat Baru">
+                <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+            </button>
         </div>
     </div>
-</div>
 
-<!-- Loading Indicator -->
-<div id="loading-indicator" class="hidden fixed bottom-24 left-1/2 -translate-x-1/2 w-full max-w-5xl">
-    <div class="flex items-center bg-white border rounded-full shadow-lg px-4 py-2 ml-auto w-fit">
-        <div class="animate-spin inline-block w-4 h-4 border-[2px] border-current border-t-transparent text-blue-600 rounded-full" role="status">
-            <span class="sr-only">Memuat...</span>
-        </div>
-        <span class="ml-2 text-sm text-gray-600">Sedang berpikir...</span>
+    <!-- Messages Container -->
+    <div id="messages" class="flex-1 overflow-y-auto p-6 space-y-8">
+        <!-- Welcome Message & Suggested Prompts will be injected here -->
+    </div>
+
+    <!-- Input Form Area -->
+    <div class="flex-shrink-0 bg-slate-50 px-4 sm:px-6 pt-4 pb-6">
+        <form id="chat-form" class="w-full max-w-3xl mx-auto">
+            <div class="relative">
+                <textarea id="message-input" 
+                    class="py-4 pl-6 pr-20 block w-full bg-white border-slate-300 rounded-full text-base placeholder:text-slate-400 focus:border-amber-500 focus:ring-2 focus:ring-amber-500/50 disabled:opacity-50 disabled:pointer-events-none resize-none"
+                    placeholder="Tanyakan tentang pura di Bali..."
+                    rows="1"></textarea>
+                <div class="absolute top-1/2 right-2 -translate-y-1/2">
+                    <button type="submit" id="submit-button"
+                        class="inline-flex items-center justify-center w-10 h-10 text-sm font-semibold rounded-full border border-transparent bg-slate-800 text-white hover:bg-slate-900 disabled:opacity-50 disabled:bg-slate-300 disabled:cursor-not-allowed transition-all"
+                        disabled>
+                        <svg class="flex-shrink-0 w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                        <span class="sr-only">Kirim</span>
+                    </button>
+                </div>
+            </div>
+        </form>
     </div>
 </div>
-
 {% endblock %}
 
 {% block extra_js %}
@@ -90,147 +56,137 @@ document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('chat-form');
     const input = document.getElementById('message-input');
     const messagesContainer = document.getElementById('messages');
-    const loadingIndicator = document.getElementById('loading-indicator');
-    const submitButton = form.querySelector('button');
+    const submitButton = document.getElementById('submit-button');
+    const newChatButton = document.getElementById('new-chat-btn');
+    let hasChatted = false;
 
     // Auto-resize textarea
     input.addEventListener('input', function() {
         this.style.height = 'auto';
-        this.style.height = (this.scrollHeight) + 'px';
-        // Enable/disable submit button based on input
+        const scrollHeight = this.scrollHeight;
+        const maxHeight = 5 * 28; // Approx 5 rows
+        this.style.height = Math.min(scrollHeight, maxHeight) + 'px';
         submitButton.disabled = !this.value.trim();
     });
 
-    // Handle form submission
-    submitButton.addEventListener('click', handleSubmit);
-    
-    // Handle enter key in textarea
+    // Enter-to-send functionality
     input.addEventListener('keydown', function(e) {
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
             if (!submitButton.disabled) {
-                handleSubmit();
+                form.requestSubmit();
             }
         }
     });
 
-    async function handleSubmit() {
-        const message = input.value.trim();
+    // Handle form submission
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        handleSubmit();
+    });
+    
+    // New chat button functionality
+    newChatButton.addEventListener('click', function() {
+        clearWelcomeScreen();
+        showWelcomeScreen();
+        hasChatted = false;
+    });
+
+    async function handleSubmit(promptText = null) {
+        const message = promptText || input.value.trim();
         if (!message) return;
 
-        // Clear input and reset height
+        if (!hasChatted) {
+            clearWelcomeScreen();
+        }
+
         input.value = '';
         input.style.height = 'auto';
         submitButton.disabled = true;
 
-        // Append user message
         appendMessage(message, true);
         
-        // Show loading indicator
-        loadingIndicator.classList.remove('hidden');
-        
-        // Log request start
-        console.log('🚀 Sending request:', {
-            timestamp: new Date().toISOString(),
-            message: message,
-            endpoint: '/api/prompt'
-        });
-        
         try {
-            console.time('API Request Duration');
             const response = await fetch('/api/prompt', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ message: message })
             });
 
-            console.log('📥 Response received:', {
-                timestamp: new Date().toISOString(),
-                status: response.status,
-                statusText: response.statusText,
-                headers: Object.fromEntries(response.headers.entries())
-            });
-
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            
             const data = await response.json();
-            console.log('📦 Response data:', {
-                timestamp: new Date().toISOString(),
-                hasAnswer: Boolean(data.answer),
-                answerLength: data.answer?.length,
-                attachmentsCount: data.attachments?.length,
-                data: data // Full response for debugging
-            });
+            if (!data.answer) throw new Error('No answer received');
             
-            if (!data.answer) {
-                throw new Error('No answer received from the server');
-            }
-            
-            // Append AI response with attachments
-            appendMessage(data.answer, false, data.attachments);
+            streamMessage(data.answer, data.attachments);
             
         } catch (error) {
-            console.error('❌ Error in API request:', {
-                timestamp: new Date().toISOString(),
-                error: error.message,
-                stack: error.stack
-            });
-            appendMessage('Sorry, I encountered an error while processing your request. Please try again.');
-        } finally {
-            console.timeEnd('API Request Duration');
-            // Hide loading indicator
-            loadingIndicator.classList.add('hidden');
+            console.error('Error in API request:', error);
+            const typingIndicator = document.getElementById('typing-indicator');
+            if(typingIndicator) typingIndicator.remove();
+            appendMessage('Maaf, terjadi kesalahan saat memproses permintaan Anda. Silakan coba lagi.', false);
         }
     }
 
-    function appendMessage(message, isUser = false, attachments = null) {
-        const messageDiv = document.createElement('div');
-        messageDiv.className = 'flex items-start ' + (isUser ? 'justify-end' : '');
+    function appendMessage(message, isUser = false) {
+        const messageWrapper = document.createElement('div');
+        messageWrapper.className = `flex items-start gap-4 ${isUser ? 'justify-end' : ''}`;
         
-        const avatar = isUser ? 
-            `<span class="inline-flex items-center justify-center h-9 w-9 rounded-full bg-blue-100">
-                <span class="text-sm font-medium text-blue-800">You</span>
-            </span>` :
-            `<span class="inline-flex items-center justify-center h-9 w-9 rounded-full bg-blue-600">
-                <span class="text-sm font-medium text-white">AI</span>
-            </span>`;
+        const userAvatarHtml = `<div class="flex-shrink-0"><span class="inline-flex items-center justify-center h-8 w-8 rounded-full bg-amber-500 text-white"><svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span></div>`;
+        const aiAvatarHtml = `<div class="flex-shrink-0"><span class="inline-flex items-center justify-center h-8 w-8 rounded-full bg-slate-900 text-white font-serif text-lg">P</span></div>`;
 
-        // Attachments grid (if any)
+        let contentHtml;
+
+        if (isUser) {
+            contentHtml = `
+                <div class="w-full max-w-xl">
+                    <div class="font-semibold text-slate-800 mb-1 text-right">Anda</div>
+                    <div class="bg-amber-100 rounded-xl p-4">
+                        <p class="text-base text-slate-700">${message}</p>
+                    </div>
+                </div>
+                ${userAvatarHtml}
+            `;
+        } else {
+            // This is for the error message
+            contentHtml = `
+                ${aiAvatarHtml}
+                <div class="w-full max-w-xl">
+                    <div class="font-semibold text-slate-800 mb-1">Asisten PuraBali</div>
+                    <div class="bg-white rounded-xl p-4 border border-slate-200/80">
+                        <p class="text-base text-red-600">${message}</p>
+                    </div>
+                </div>
+            `;
+        }
+        
+        messageWrapper.innerHTML = contentHtml;
+        messagesContainer.appendChild(messageWrapper);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+
+    function streamMessage(message, attachments = null) {
+        const messageWrapper = document.createElement('div');
+        messageWrapper.className = 'flex items-start gap-4';
+        
+        const avatarHtml = `<div class="flex-shrink-0"><span class="inline-flex items-center justify-center h-8 w-8 rounded-full bg-slate-900 text-white font-serif text-lg">P</span></div>`;
+
         let attachmentsHtml = '';
-        if (!isUser && attachments && attachments.length > 0) {
+        if (attachments && attachments.length > 0) {
             attachmentsHtml = `
                 <div class="mt-4">
-                    <div class="text-xs font-semibold text-gray-500 mb-2 flex items-center gap-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        Pura Terkait:
-                    </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        ${attachments.map(attachment => `
-                            <a href="/pura/${attachment.id_pura}" target="_blank" aria-label="Lihat detail ${attachment.nama_pura}" class="flex flex-col bg-white border shadow-sm rounded-xl overflow-hidden transition-transform hover:scale-[1.02] hover:shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400">
-                                ${attachment.link_gambar ? 
-                                    `<img class=\"w-full h-40 object-cover\" src=\"${attachment.link_gambar}\" alt=\"${attachment.nama_pura}\">` : 
-                                    '<div class=\"w-full h-40 bg-gray-100 flex items-center justify-center text-gray-400\">No image</div>'
-                                }
-                                <div class=\"p-4\">
-                                    <h3 class=\"text-base font-semibold text-gray-800\">${attachment.nama_pura}</h3>
-                                    <p class=\"mt-1 text-sm text-gray-600\">${attachment.deskripsi}</p>
-                                    <div class=\"mt-2 flex flex-wrap gap-2\">
-                                        <span class=\"inline-flex items-center gap-1.5 py-1.5 px-3 rounded-full text-xs font-medium bg-blue-100 text-blue-800\">
-                                            ${attachment.jenis_pura}
-                                        </span>
-                                        <span class=\"inline-flex items-center gap-1.5 py-1.5 px-3 rounded-full text-xs font-medium bg-gray-100 text-gray-800\">
-                                            ${attachment.kabupaten}
-                                        </span>
+                    <h4 class="text-sm font-semibold text-slate-800 mb-2">Pura Terkait:</h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        ${attachments.map(att => `
+                            <a href="/pura/${att.id_pura}" target="_blank" class="block bg-slate-100 border rounded-xl overflow-hidden group transition-all hover:shadow-lg hover:border-amber-300 hover:-translate-y-0.5">
+                                <div class="flex flex-row sm:flex-col">
+                                    <div class="flex-shrink-0 w-20 h-20 sm:w-full sm:h-32 bg-slate-200 overflow-hidden">
+                                        <img src="${att.link_gambar || 'https://placehold.co/400x400/e2e8f0/94a3b8?text=Pura'}" alt="${att.nama_pura}" class="w-full h-full object-cover transition-transform group-hover:scale-105">
                                     </div>
-                                    ${attachment.link_lokasi ? 
-                                        `<a href=\"${attachment.link_lokasi}\" target=\"_blank\" class=\"mt-3 inline-flex items-center gap-2 text-sm font-medium text-blue-600 hover:text-blue-700\" aria-label=\"Lihat di Maps\" onclick=\"event.stopPropagation(); event.preventDefault(); window.open('${attachment.link_lokasi}', '_blank'); return false;\">\n                                            <svg class=\"w-4 h-4\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\">\n                                                <path d=\"M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z\"></path>\n                                                <circle cx=\"12\" cy=\"10\" r=\"3\"></circle>\n                                            </svg>\n                                            Lihat di Maps\n                                        </a>` : ''
-                                    }
+                                    <div class="flex-grow p-3 overflow-hidden">
+                                        <h5 class="font-semibold text-sm text-slate-800 truncate">${att.nama_pura}</h5>
+                                        <p class="text-xs text-slate-500 truncate">${att.kabupaten}</p>
+                                    </div>
                                 </div>
                             </a>
                         `).join('')}
@@ -239,107 +195,116 @@ document.addEventListener('DOMContentLoaded', function() {
             `;
         }
 
-        // Render AI message as markdown, user message as plain text
-        let messageContent = isUser
-            ? `<p class="text-sm text-gray-800">${message}</p>`
-            : `<div class="prose prose-sm max-w-none text-gray-800">${marked.parse(message)}</div>`;
-
-        messageDiv.innerHTML = `
-            ${isUser ? '' : '<div class="flex-shrink-0">' + avatar + '</div>'}
-            <div class="${isUser ? 'mr-3' : 'ml-3'}">
-                <div class="${isUser ? 'bg-blue-50' : 'bg-gray-100'} rounded-xl p-4 max-w-2xl">
-                    ${messageContent}
-                    ${attachmentsHtml}
+        messageWrapper.innerHTML = `
+            ${avatarHtml}
+            <div class="w-full max-w-xl">
+                <div class="font-semibold text-slate-800 mb-1">Asisten PuraBali</div>
+                <div class="bg-white rounded-xl p-4 border border-slate-200/80">
+                    <div class="chatbot-content-stream"></div>
+                    <div class="attachments-container" style="display: none;">${attachmentsHtml}</div>
                 </div>
             </div>
-            ${isUser ? '<div class="flex-shrink-0">' + avatar + '</div>' : ''}
         `;
+
+        const typingIndicator = document.getElementById('typing-indicator');
+        if (typingIndicator) {
+            messagesContainer.replaceChild(messageWrapper, typingIndicator);
+        } else {
+            messagesContainer.appendChild(messageWrapper);
+        }
         
-        messagesContainer.appendChild(messageDiv);
+        const contentDiv = messageWrapper.querySelector('.chatbot-content-stream');
+        const attachmentsContainer = messageWrapper.querySelector('.attachments-container');
+        let i = 0;
+        const speed = 20; // milliseconds per character
+
+        function typeWriter() {
+            if (i < message.length) {
+                contentDiv.innerHTML = marked.parse(message.substring(0, i + 1));
+                i++;
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                setTimeout(typeWriter, speed);
+            } else {
+                // UX Improvement: Remove the streaming class to stop the blinking cursor
+                contentDiv.classList.remove('chatbot-content-stream');
+                contentDiv.classList.add('chatbot-content');
+                // Once typing is done, show attachments if they exist
+                if (attachments && attachments.length > 0) {
+                    attachmentsContainer.style.display = 'block';
+                }
+            }
+        }
+        typeWriter();
+    }
+
+    function appendTypingIndicator() {
+        const indicator = document.createElement('div');
+        indicator.id = 'typing-indicator';
+        indicator.className = 'flex items-start gap-4';
+        indicator.innerHTML = `
+            <div class="flex-shrink-0"><span class="inline-flex items-center justify-center h-8 w-8 rounded-full bg-slate-900 text-white font-serif text-lg">P</span></div>
+            <div class="w-full max-w-xl">
+                 <div class="font-semibold text-slate-800 mb-1">Asisten PuraBali</div>
+                 <div class="bg-white rounded-xl p-4 border border-slate-200/80 flex items-center space-x-1.5">
+                    <span class="h-2 w-2 bg-slate-500 rounded-full animate-pulse" style="animation-delay: 0s;"></span>
+                    <span class="h-2 w-2 bg-slate-500 rounded-full animate-pulse" style="animation-delay: 0.2s;"></span>
+                    <span class="h-2 w-2 bg-slate-500 rounded-full animate-pulse" style="animation-delay: 0.4s;"></span>
+                </div>
+            </div>`;
+        messagesContainer.appendChild(indicator);
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
     }
 
-    form.addEventListener('submit', async function(e) {
-        e.preventDefault();
-        const message = input.value.trim();
-        if (!message) return;
+    function showWelcomeScreen() {
+        const welcomeHtml = `
+            <div id="welcome-screen" class="text-center pt-8 sm:pt-16">
+                <div class="inline-block bg-gradient-to-br from-amber-400 to-orange-500 p-4 rounded-full mb-6 shadow-lg">
+                    <svg class="w-12 h-12 text-white" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21h20"/><path d="M3 15h1m16 0h1"/><path d="M4 21V10.74a2 2 0 0 1 .5-.92l4-3.5a2 2 0 0 1 2.82 0l4 3.5a2 2 0 0 1 .5.92V21"/><path d="M10 21v-5a2 2 0 1 1 4 0v5"/><path d="M15 21v-5a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v5"/></svg>
+                </div>
+                <h2 class="text-4xl font-bold text-slate-800 font-serif">Halo, ada yang bisa saya bantu?</h2>
+                <p class="text-lg text-slate-600 mt-2">Saya adalah asisten virtual untuk informasi Pura di Bali.</p>
+                <div class="mt-12 max-w-2xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <button class="suggested-prompt text-left bg-white p-4 rounded-xl border border-slate-200 hover:bg-slate-100 transition-colors hover:border-amber-300"><div class="font-semibold text-slate-700">Di mana lokasi Pura Besakih?</div><div class="text-sm text-slate-500">Tampilkan lokasi di peta</div></button>
+                    <button class="suggested-prompt text-left bg-white p-4 rounded-xl border border-slate-200 hover:bg-slate-100 transition-colors hover:border-amber-300"><div class="font-semibold text-slate-700">Ceritakan sejarah Pura Uluwatu</div><div class="text-sm text-slate-500">Berikan deskripsi singkat</div></button>
+                    <button class="suggested-prompt text-left bg-white p-4 rounded-xl border border-slate-200 hover:bg-slate-100 transition-colors hover:border-amber-300"><div class="font-semibold text-slate-700">Pura apa saja yang ada di Gianyar?</div><div class="text-sm text-slate-500">Lihat daftar pura berdasarkan kabupaten</div></button>
+                    <button class="suggested-prompt text-left bg-white p-4 rounded-xl border border-slate-200 hover:bg-slate-100 transition-colors hover:border-amber-300"><div class="font-semibold text-slate-700">Apa itu Pura Kahyangan Jagat?</div><div class="text-sm text-slate-500">Jelaskan tentang jenis pura</div></button>
+                </div>
+            </div>
+        `;
+        messagesContainer.innerHTML = welcomeHtml;
 
-        // Clear input and reset height
-        input.value = '';
-        input.style.height = 'auto';
-
-        // Append user message
-        appendMessage(message, true);
-        
-        // Show loading indicator
-        loadingIndicator.classList.remove('hidden');
-        
-        // Log request start
-        console.log('🚀 Sending request:', {
-            timestamp: new Date().toISOString(),
-            message: message,
-            endpoint: '/api/prompt'
+        document.querySelectorAll('.suggested-prompt').forEach(button => {
+            button.addEventListener('click', () => {
+                const promptText = button.querySelector('.font-semibold').textContent;
+                handleSubmit(promptText);
+            });
         });
-        
-        try {
-            console.time('API Request Duration');
-            const response = await fetch('/api/prompt', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ message: message })
-            });
+    }
 
-            console.log('📥 Response received:', {
-                timestamp: new Date().toISOString(),
-                status: response.status,
-                statusText: response.statusText,
-                headers: Object.fromEntries(response.headers.entries())
-            });
+    function clearWelcomeScreen() {
+        const welcomeScreen = document.getElementById('welcome-screen');
+        if (welcomeScreen) messagesContainer.innerHTML = '';
+        hasChatted = true;
+    }
 
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-
-            const data = await response.json();
-            console.log('📦 Response data:', {
-                timestamp: new Date().toISOString(),
-                hasAnswer: Boolean(data.answer),
-                answerLength: data.answer?.length,
-                attachmentsCount: data.attachments?.length,
-                data: data // Full response for debugging
-            });
-            
-            if (!data.answer) {
-                throw new Error('No answer received from the server');
-            }
-            
-            // Append AI response with attachments
-            appendMessage(data.answer, false, data.attachments);
-            
-        } catch (error) {
-            console.error('❌ Error in API request:', {
-                timestamp: new Date().toISOString(),
-                error: error.message,
-                stack: error.stack
-            });
-            appendMessage('Sorry, I encountered an error while processing your request. Please try again.');
-        } finally {
-            console.timeEnd('API Request Duration');
-            // Hide loading indicator
-            loadingIndicator.classList.add('hidden');
-        }
-    });
-
-    // Enable submit button on input
-    input.addEventListener('input', function() {
-        const submitButton = form.querySelector('button[type="submit"]');
-        submitButton.disabled = !this.value.trim();
-    });
-
-    // Disable submit button initially if no input
-    submitButton.disabled = !input.value.trim();
+    showWelcomeScreen();
 });
 </script>
-{% endblock %} 
+<style>
+    .chatbot-content-stream p:last-of-type::after {
+        content: '▋';
+        animation: blink 1s step-end infinite;
+        margin-left: 2px;
+    }
+    @keyframes blink {
+        50% { opacity: 0; }
+    }
+    .chatbot-content { font-size: 1rem; line-height: 1.75rem; color: #334155; }
+    .chatbot-content p { margin-bottom: 1rem; }
+    .chatbot-content p:last-child { margin-bottom: 0; }
+    .chatbot-content ul, .chatbot-content ol { padding-left: 1.25rem; margin-bottom: 1rem; }
+    .chatbot-content ul { list-style-type: disc; }
+    .chatbot-content ol { list-style-type: decimal; }
+    .chatbot-content li { margin-bottom: 0.25rem; }
+</style>
+{% endblock %}
