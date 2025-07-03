@@ -11,6 +11,9 @@ from ...schemas.common import PaginationResponse
 from ...database.models import PuraRepository, KabupatenRepository, JenisPuraRepository
 from ...core.exceptions import NotFoundException
 from ...core.logging import get_logger
+from ...data_loader import load_corpus
+from ...search import SemanticSearch
+from ...gen import generate_response
 
 logger = get_logger(__name__)
 
@@ -22,6 +25,23 @@ pura_repo = PuraRepository()
 kabupaten_repo = KabupatenRepository()
 jenis_pura_repo = JenisPuraRepository()
 
+# Load corpus and initialize search engine (singleton)
+try:
+    texts, metadata = load_corpus()
+    search_engine = SemanticSearch(texts, metadata)
+except Exception as e:
+    logger.error(f"Error initializing search engine: {e}")
+    texts, metadata = [], []
+    search_engine = None
+
+def extract_lokasi(meta: dict) -> str:
+    if meta.get("type") == "lokasi" and "https://" in meta.get("chunk", ""):
+        return meta["chunk"].replace("Lokasi Google Maps: ", "").strip()
+    return ""
+
+def get_gambar(pura_id: str) -> str:
+    # Use the repository for image lookup
+    return pura_repo.get_pura_gambar(pura_id)
 
 @api_router.get("/pura", response_model=PuraListResponse)
 async def get_all_pura(
@@ -108,23 +128,38 @@ async def get_all_jenis_pura():
 
 @api_router.post("/prompt", response_model=PromptResponse)
 async def handle_prompt(payload: PromptRequest):
-    """Handle chat prompt with RAG capabilities."""
+    """Handle chat prompt with RAG capabilities (real implementation)."""
+    if not search_engine:
+        raise HTTPException(status_code=500, detail="Search engine not initialized")
     try:
-        # For now, return a simple response
-        # TODO: Implement full RAG functionality
-        answer = f"Terima kasih atas pertanyaan Anda: '{payload.message}'. Fitur RAG sedang dalam pengembangan."
-        
-        return PromptResponse(
-            answer=answer,
-            attachments=[]
-        )
-        
+        user_query = payload.message
+        retrieved = search_engine.search(user_query, top_k=3)
+        answer = generate_response(user_query, retrieved)
+        if not answer:
+            raise HTTPException(status_code=500, detail="Failed to generate response")
+        want_attachment = any(kw in user_query.lower() for kw in ["di mana", "lokasi", "maps", "gambar", "foto", "pura"])
+        attachments = []
+        if want_attachment:
+            seen_ids = set()
+            for r in retrieved:
+                meta = r["meta"]
+                pura_id = meta.get("id")
+                if pura_id in seen_ids:
+                    continue
+                seen_ids.add(pura_id)
+                attachments.append(PuraAttachment(
+                    id_pura=pura_id,
+                    nama_pura=meta.get("nama", ""),
+                    jenis_pura=meta.get("jenis", ""),
+                    kabupaten=meta.get("kabupaten", ""),
+                    deskripsi=meta.get("chunk", ""),
+                    link_lokasi=extract_lokasi(meta),
+                    link_gambar=get_gambar(pura_id)
+                ))
+        return PromptResponse(answer=answer, attachments=attachments)
     except Exception as e:
-        logger.error(f"Error processing prompt: {e}")
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Failed to process prompt"
-        )
+        logger.error(f"Error in RAG /prompt: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 @api_router.get("/cache/stats")
