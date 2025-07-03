@@ -126,18 +126,58 @@ async def get_all_jenis_pura():
         )
 
 
+def is_list_query(query: str) -> bool:
+    # Detect if the query is asking for a list
+    keywords = ["daftar", "list", "semua", "berikan semua", "tampilkan semua", "sebutkan semua", "apa saja", "semuanya"]
+    return any(kw in query.lower() for kw in keywords)
+
+def extract_category(query: str, jenis_list) -> str:
+    # Try to extract the category from the query using the dynamic list
+    for jenis in jenis_list:
+        if jenis and jenis.lower() in query.lower():
+            return jenis
+    return ""
+
 @api_router.post("/prompt", response_model=PromptResponse)
 async def handle_prompt(payload: PromptRequest):
-    """Handle chat prompt with RAG capabilities (real implementation)."""
+    """Handle chat prompt with RAG capabilities (enhanced for list queries, dynamic category)."""
     if not search_engine:
         raise HTTPException(status_code=500, detail="Search engine not initialized")
     try:
         user_query = payload.message
-        retrieved = search_engine.search(user_query, top_k=3)
-        answer = generate_response(user_query, retrieved)
+        # Detect if this is a list/daftar query
+        if is_list_query(user_query):
+            # Dynamically get all available jenis_pura
+            jenis_list = [j.get("nama_jenis_pura") for j in jenis_pura_repo.get_all_jenis_pura()]
+            category = extract_category(user_query, jenis_list)
+            # Retrieve all matching temples for the category (cap at 30)
+            if category:
+                # Filter metadata for this category
+                indices = [i for i, meta in enumerate(search_engine.metadata) if meta.get("jenis") == category]
+                # If none found, fallback to normal search
+                if not indices:
+                    retrieved = search_engine.search(user_query, top_k=10)
+                else:
+                    # Build results for all
+                    results = []
+                    for idx in indices[:30]:
+                        results.append({
+                            "score": 1.0,  # Not used for list
+                            "text": search_engine.texts[idx],
+                            "meta": search_engine.metadata[idx]
+                        })
+                    retrieved = results
+            else:
+                # No category found, fallback to normal search
+                retrieved = search_engine.search(user_query, top_k=10)
+            answer = generate_response(user_query, retrieved)
+        else:
+            # Default: top-3 semantic search
+            retrieved = search_engine.search(user_query, top_k=3)
+            answer = generate_response(user_query, retrieved)
         if not answer:
             raise HTTPException(status_code=500, detail="Failed to generate response")
-        want_attachment = any(kw in user_query.lower() for kw in ["di mana", "lokasi", "maps", "gambar", "foto", "pura"])
+        want_attachment = any(kw in user_query.lower() for kw in ["di mana", "lokasi", "maps", "gambar", "foto", "pura", "daftar", "list", "semua"])
         attachments = []
         if want_attachment:
             seen_ids = set()
