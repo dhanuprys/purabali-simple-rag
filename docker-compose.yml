@@ -5,19 +5,10 @@ services:
     build: .
     ports:
       - "8000:8000"
-    environment:
-      - ENVIRONMENT=production
-      - MYSQL_HOST=${MYSQL_HOST:-localhost}
-      - MYSQL_USER=${MYSQL_USER:-root}
-      - MYSQL_PASSWORD=${MYSQL_PASSWORD:-}
-      - MYSQL_DATABASE=${MYSQL_DATABASE:-purabali}
-      - MYSQL_PORT=${MYSQL_PORT:-3306}
-      - GEMINI_API_KEY=${GEMINI_API_KEY}
-      - GEMINI_API_KEYS=${GEMINI_API_KEYS}
-      - CACHE_DEFAULT_TTL=${CACHE_DEFAULT_TTL:-3600}
-      - CACHE_LOGGING=${CACHE_LOGGING:-INFO}
+    env_file:
+      - .env
     volumes:
-      - ./cache:/home/appuser/cache
+      - cache_data:/home/appuser/cache
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "python", "-c", "import httpx; httpx.get('http://localhost:8000/')"]
@@ -30,9 +21,11 @@ services:
 
   mysql:
     image: mysql:8.0
+    env_file:
+      - .env
     environment:
-      - MYSQL_ROOT_PASSWORD=${MYSQL_PASSWORD:-}
-      - MYSQL_DATABASE=${MYSQL_DATABASE:-purabali}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
     ports:
       - "3306:3306"
     volumes:
@@ -45,4 +38,5 @@ services:
       retries: 10
 
 volumes:
-  mysql_data: 
+  mysql_data:
+  cache_data: 
