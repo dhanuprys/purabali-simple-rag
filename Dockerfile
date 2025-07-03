@@ -22,13 +22,14 @@ RUN apt-get update && apt-get install -y \
 # Set persistent model cache paths
 ENV HF_HOME=/cache/huggingface \
     TORCH_HOME=/cache/torch \
-    SENTENCE_TRANSFORMERS_HOME=/cache/sentence-transformers
+    SENTENCE_TRANSFORMERS_HOME=/cache/sentence-transformers \
+    MODEL_CACHE_DIR=/home/appuser/model_storage
 
 # Security: run as non-root user
 RUN useradd -m appuser
 
-# Create cache directory and set permissions
-RUN mkdir -p /cache && chown -R appuser:appuser /cache
+# Create cache and model storage directories and set permissions
+RUN mkdir -p /cache /home/appuser/model_storage && chown -R appuser:appuser /cache /home/appuser/model_storage
 
 WORKDIR /home/appuser
 
@@ -44,6 +45,9 @@ COPY --chown=appuser:appuser migration.sql ./
 
 # Create necessary directories for the app
 RUN mkdir -p app/static app/templates
+
+# Optional: Preload model during build (uncomment if you want to cache model in image)
+# RUN python app/preload_model.py
 
 # Use non-root user
 USER appuser

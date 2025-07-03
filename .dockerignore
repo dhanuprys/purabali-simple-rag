@@ -64,6 +64,9 @@ GEMINI_KEY_ROTATION.md
 *.sqlite
 *.db
 
+# Model storage (will be mounted as volume)
+model_storage/
+
 # Logs
 logs/
 *.log

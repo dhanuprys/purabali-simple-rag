@@ -9,6 +9,7 @@ services:
       - .env
     volumes:
       - cache_data:/home/appuser/cache
+      - ./model_storage:/home/appuser/model_storage
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "python", "-c", "import httpx; httpx.get('http://localhost:8000/')"]
@@ -21,8 +22,6 @@ services:
 
   mysql:
     image: mysql:8.0
-    env_file:
-      - .env
     environment:
       - MYSQL_ROOT_PASSWORD=${MYSQL_PASSWORD}
       - MYSQL_DATABASE=${MYSQL_DATABASE}
@@ -30,7 +29,8 @@ services:
       - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
-      - ./migration.sql:/docker-entrypoint-initdb.d/migration.sql
+      - ./migration.sql:/docker-entrypoint-initdb.d/01-migration.sql
+      - ./init-mysql.sql:/docker-entrypoint-initdb.d/00-init.sql
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
