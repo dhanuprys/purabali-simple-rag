@@ -105,6 +105,7 @@ document.addEventListener('DOMContentLoaded', function() {
         submitButton.disabled = true;
 
         appendMessage(message, true);
+        appendTypingIndicator();
         
         try {
             const response = await fetch('/api/prompt', {
@@ -128,17 +129,15 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    function appendMessage(message, isUser = false) {
+    function appendMessage(message, isUser = false, attachments = null) {
         const messageWrapper = document.createElement('div');
-        messageWrapper.className = `flex items-start gap-4 ${isUser ? 'justify-end' : ''}`;
         
         const userAvatarHtml = `<div class="flex-shrink-0"><span class="inline-flex items-center justify-center h-8 w-8 rounded-full bg-amber-500 text-white"><svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span></div>`;
         const aiAvatarHtml = `<div class="flex-shrink-0"><span class="inline-flex items-center justify-center h-8 w-8 rounded-full bg-slate-900 text-white font-serif text-lg">P</span></div>`;
 
-        let contentHtml;
-
         if (isUser) {
-            contentHtml = `
+            messageWrapper.className = 'flex items-start gap-4 justify-end';
+            messageWrapper.innerHTML = `
                 <div class="w-full max-w-xl">
                     <div class="font-semibold text-slate-800 mb-1 text-right">Anda</div>
                     <div class="bg-amber-100 rounded-xl p-4">
@@ -149,41 +148,46 @@ document.addEventListener('DOMContentLoaded', function() {
             `;
         } else {
             // This is for the error message
-            contentHtml = `
-                ${aiAvatarHtml}
-                <div class="w-full max-w-xl">
-                    <div class="font-semibold text-slate-800 mb-1">Asisten PuraBali</div>
-                    <div class="bg-white rounded-xl p-4 border border-slate-200/80">
-                        <p class="text-base text-red-600">${message}</p>
-                    </div>
+            messageWrapper.className = 'space-y-2';
+            messageWrapper.innerHTML = `
+                <div class="flex items-center gap-4">
+                    ${aiAvatarHtml}
+                    <div class="font-semibold text-slate-800">Asisten PuraBali</div>
+                </div>
+                <div class="pl-12">
+                    <p class="text-base text-red-600">${message}</p>
                 </div>
             `;
         }
         
-        messageWrapper.innerHTML = contentHtml;
         messagesContainer.appendChild(messageWrapper);
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
     }
 
     function streamMessage(message, attachments = null) {
         const messageWrapper = document.createElement('div');
-        messageWrapper.className = 'flex items-start gap-4';
+        messageWrapper.className = 'space-y-2';
         
-        const avatarHtml = `<div class="flex-shrink-0"><span class="inline-flex items-center justify-center h-8 w-8 rounded-full bg-slate-900 text-white font-serif text-lg">P</span></div>`;
+        const headerHtml = `
+            <div class="flex items-center gap-4">
+                <span class="inline-flex items-center justify-center h-8 w-8 rounded-full bg-slate-900 text-white font-serif text-lg">P</span>
+                <div class="font-semibold text-slate-800">Asisten PuraBali</div>
+            </div>
+        `;
 
         let attachmentsHtml = '';
         if (attachments && attachments.length > 0) {
             attachmentsHtml = `
-                <div class="mt-4">
-                    <h4 class="text-sm font-semibold text-slate-800 mb-2">Pura Terkait:</h4>
+                <div class="mt-6 pt-4 border-t border-slate-200">
+                    <h4 class="text-sm font-semibold text-slate-800 mb-3">Pura Terkait:</h4>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         ${attachments.map(att => `
-                            <a href="/pura/${att.id_pura}" target="_blank" class="block bg-slate-100 border rounded-xl overflow-hidden group transition-all hover:shadow-lg hover:border-amber-300 hover:-translate-y-0.5">
-                                <div class="flex flex-row sm:flex-col">
-                                    <div class="flex-shrink-0 w-20 h-20 sm:w-full sm:h-32 bg-slate-200 overflow-hidden">
+                            <a href="/pura/${att.id_pura}" target="_blank" class="block bg-white border rounded-xl overflow-hidden group transition-all hover:shadow-lg hover:border-amber-300 hover:-translate-y-0.5">
+                                <div class="flex items-center gap-3">
+                                    <div class="flex-shrink-0 w-16 h-16 sm:w-20 sm:h-20 bg-slate-200 overflow-hidden">
                                         <img src="${att.link_gambar || 'https://placehold.co/400x400/e2e8f0/94a3b8?text=Pura'}" alt="${att.nama_pura}" class="w-full h-full object-cover transition-transform group-hover:scale-105">
                                     </div>
-                                    <div class="flex-grow p-3 overflow-hidden">
+                                    <div class="flex-grow p-2 overflow-hidden">
                                         <h5 class="font-semibold text-sm text-slate-800 truncate">${att.nama_pura}</h5>
                                         <p class="text-xs text-slate-500 truncate">${att.kabupaten}</p>
                                     </div>
@@ -196,13 +200,10 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         messageWrapper.innerHTML = `
-            ${avatarHtml}
-            <div class="w-full max-w-xl">
-                <div class="font-semibold text-slate-800 mb-1">Asisten PuraBali</div>
-                <div class="bg-white rounded-xl p-4 border border-slate-200/80">
-                    <div class="chatbot-content-stream"></div>
-                    <div class="attachments-container" style="display: none;">${attachmentsHtml}</div>
-                </div>
+            ${headerHtml}
+            <div class="pl-12">
+                <div class="chatbot-content-stream"></div>
+                <div class="attachments-container" style="display: none;">${attachmentsHtml}</div>
             </div>
         `;
 
@@ -225,10 +226,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 messagesContainer.scrollTop = messagesContainer.scrollHeight;
                 setTimeout(typeWriter, speed);
             } else {
-                // UX Improvement: Remove the streaming class to stop the blinking cursor
                 contentDiv.classList.remove('chatbot-content-stream');
                 contentDiv.classList.add('chatbot-content');
-                // Once typing is done, show attachments if they exist
                 if (attachments && attachments.length > 0) {
                     attachmentsContainer.style.display = 'block';
                 }
@@ -240,12 +239,14 @@ document.addEventListener('DOMContentLoaded', function() {
     function appendTypingIndicator() {
         const indicator = document.createElement('div');
         indicator.id = 'typing-indicator';
-        indicator.className = 'flex items-start gap-4';
+        indicator.className = 'space-y-2';
         indicator.innerHTML = `
-            <div class="flex-shrink-0"><span class="inline-flex items-center justify-center h-8 w-8 rounded-full bg-slate-900 text-white font-serif text-lg">P</span></div>
-            <div class="w-full max-w-xl">
-                 <div class="font-semibold text-slate-800 mb-1">Asisten PuraBali</div>
-                 <div class="bg-white rounded-xl p-4 border border-slate-200/80 flex items-center space-x-1.5">
+            <div class="flex items-center gap-4">
+                <span class="inline-flex items-center justify-center h-8 w-8 rounded-full bg-slate-900 text-white font-serif text-lg">P</span>
+                <div class="font-semibold text-slate-800">Asisten PuraBali</div>
+            </div>
+            <div class="pl-12">
+                 <div class="bg-white rounded-xl p-4 border border-slate-200/80 flex items-center space-x-1.5 w-fit">
                     <span class="h-2 w-2 bg-slate-500 rounded-full animate-pulse" style="animation-delay: 0s;"></span>
                     <span class="h-2 w-2 bg-slate-500 rounded-full animate-pulse" style="animation-delay: 0.2s;"></span>
                     <span class="h-2 w-2 bg-slate-500 rounded-full animate-pulse" style="animation-delay: 0.4s;"></span>
@@ -307,13 +308,4 @@ document.addEventListener('DOMContentLoaded', function() {
     .chatbot-content ol { list-style-type: decimal; }
     .chatbot-content li { margin-bottom: 0.25rem; }
 </style>
-{% endblock %}
-
-{% block extra_head %}
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content="Asisten Virtual PuraBali" />
-  <meta property="og:description" content="Tanyakan apa saja tentang pura di Bali kepada asisten virtual kami." />
-  <meta property="og:image" content="https://placehold.co/600x400/e2e8f0/94a3b8?text=Chat" />
-  <meta property="og:url" content="{{ request.url }}" />
-  <meta property="og:site_name" content="PuraBali" />
 {% endblock %}
