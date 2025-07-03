@@ -308,3 +308,12 @@ document.addEventListener('DOMContentLoaded', function() {
     .chatbot-content li { margin-bottom: 0.25rem; }
 </style>
 {% endblock %}
+
+{% block extra_head %}
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Asisten Virtual PuraBali" />
+  <meta property="og:description" content="Tanyakan apa saja tentang pura di Bali kepada asisten virtual kami." />
+  <meta property="og:image" content="https://placehold.co/600x400/e2e8f0/94a3b8?text=Chat" />
+  <meta property="og:url" content="{{ request.url }}" />
+  <meta property="og:site_name" content="PuraBali" />
+{% endblock %}

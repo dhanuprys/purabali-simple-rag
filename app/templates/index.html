@@ -1,6 +1,15 @@
 {% extends 'base.html' %}
 {% block title %}Home - Purabali Data Explorer{% endblock %}
 
+{% block extra_head %}
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="PuraBali - Jelajahi Pesona Pura di Bali" />
+  <meta property="og:description" content="Platform modern untuk menemukan informasi pura, kabupaten, dan jenis pura di seluruh Bali. Mulailah perjalanan digital Anda ke jantung budaya Bali." />
+  <meta property="og:image" content="https://placehold.co/600x400/e2e8f0/94a3b8?text=PuraBali" />
+  <meta property="og:url" content="{{ request.url }}" />
+  <meta property="og:site_name" content="PuraBali" />
+{% endblock %}
+
 {% block content %}
 <div class="w-full">
     <!-- Hero Section -->

@@ -1,6 +1,15 @@
 {% extends 'base.html' %}
 {% block title %}Daftar Kabupaten{% endblock %}
 
+{% block extra_head %}
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Daftar Kabupaten di Bali - PuraBali" />
+  <meta property="og:description" content="Jelajahi setiap kabupaten di Bali dan temukan pura yang ada di wilayahnya." />
+  <meta property="og:image" content="https://placehold.co/600x400/e2e8f0/94a3b8?text=Kabupaten" />
+  <meta property="og:url" content="{{ request.url }}" />
+  <meta property="og:site_name" content="PuraBali" />
+{% endblock %}
+
 {% block content %}
 <div class="w-full max-w-7xl mx-auto py-12 sm:py-16 px-4 sm:px-6 lg:px-8">
 
