@@ -1,6 +1,15 @@
 {% extends 'base.html' %}
 {% block title %}Detail Pura - {{ pura.nama_pura }}{% endblock %}
 
+{% block extra_head %}
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="{{ pura.nama_pura|default('Detail Pura') }}" />
+  <meta property="og:description" content="{{ pura.deskripsi_singkat|default('Informasi pura di Bali.') }}" />
+  <meta property="og:image" content="{{ pura.link_gambar|default('https://placehold.co/600x400/e2e8f0/94a3b8?text=Pura') }}" />
+  <meta property="og:url" content="{{ request.url }}" />
+  <meta property="og:site_name" content="PuraBali" />
+{% endblock %}
+
 {% block content %}
 <div class="bg-slate-50 w-full flex items-center justify-center py-12 sm:py-16">
   <div class="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
